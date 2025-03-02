@@ -1,87 +1,113 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
-import { insertWaitlistSchema } from "@shared/schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   BookCopy,
-  Users,
   ArrowRight,
-  Pencil,
   Heart,
+  Pencil,
   Book,
   ScrollText,
   School,
   FileEdit,
 } from "lucide-react";
-import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { useSearchParams } from "react-router-dom";
+import { 
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Link } from "react-router-dom";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+
+// Sample book data
+const featuredBooks = [
+  {
+    id: 1,
+    title: "The Silent Echo",
+    author: "Elizabeth Morgan",
+    cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=687&auto=format&fit=crop",
+    summary: "A gripping tale of mystery and redemption set in a small coastal town.",
+    genre: "Mystery"
+  },
+  {
+    id: 2,
+    title: "Beyond the Horizon",
+    author: "James Patterson",
+    cover: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?q=80&w=687&auto=format&fit=crop",
+    summary: "An epic adventure across continents in search of ancient wisdom.",
+    genre: "Adventure"
+  },
+  {
+    id: 3,
+    title: "Whispers in the Wind",
+    author: "Sarah Johnson",
+    cover: "https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=688&auto=format&fit=crop",
+    summary: "A heartwarming story of love and loss in rural America.",
+    genre: "Romance"
+  },
+  {
+    id: 4,
+    title: "The Last Guardian",
+    author: "Michael Chen",
+    cover: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=687&auto=format&fit=crop",
+    summary: "In a world where magic is fading, one guardian stands between order and chaos.",
+    genre: "Fantasy"
+  },
+  {
+    id: 5,
+    title: "Echoes of Tomorrow",
+    author: "Amara Wilson",
+    cover: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=687&auto=format&fit=crop",
+    summary: "A thought-provoking journey through possible futures and parallel realities.",
+    genre: "Science Fiction"
+  },
+  {
+    id: 6,
+    title: "The Hidden Truth",
+    author: "Robert Davis",
+    cover: "https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=1476&auto=format&fit=crop",
+    summary: "A detective's relentless pursuit of justice uncovers secrets that threaten the entire city.",
+    genre: "Thriller"
+  },
+  {
+    id: 7,
+    title: "Seasons of Change",
+    author: "Emily Zhang",
+    cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=687&auto=format&fit=crop",
+    summary: "Four friends navigate life's challenges through different seasons of their lives.",
+    genre: "Contemporary Fiction"
+  },
+  {
+    id: 8,
+    title: "Mountain's Echo",
+    author: "Daniel Torres",
+    cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1374&auto=format&fit=crop",
+    summary: "A survival story set in the unforgiving wilderness of the Rocky Mountains.",
+    genre: "Adventure"
+  },
+  {
+    id: 9,
+    title: "The Forgotten Path",
+    author: "Olivia Parker",
+    cover: "https://images.unsplash.com/photo-1629992101753-56d196c8aabb?q=80&w=690&auto=format&fit=crop",
+    summary: "An archaeological discovery leads to an ancient mystery with modern implications.",
+    genre: "Historical Fiction"
+  },
+  {
+    id: 10,
+    title: "Starlight Dreams",
+    author: "Nathan Williams",
+    cover: "https://images.unsplash.com/photo-1518744386442-2d48ac47a7eb?q=80&w=1374&auto=format&fit=crop",
+    summary: "A young astronomer's journey to prove her revolutionary theory about the cosmos.",
+    genre: "Science Fiction"
+  }
+];
 
 export default function Home() {
   const { toast } = useToast();
-  const [searchParams] = useSearchParams(); // ✅ Get URL parameters
-  const source = searchParams.get("src") || "Website"; // Default if missing
-
-  const form = useForm({
-    resolver: zodResolver(insertWaitlistSchema),
-    defaultValues: {
-      email: "",
-      fullName: "",
-      Hp: "",
-      source: source,
-    },
-  });
-
-  /*const { data: waitlistCount } = useQuery<{ count: number }>({
-    queryKey: ["/api/waitlist/count"],
-  });*/
-
-  const joinWaitlist = useMutation({   
-    mutationFn: async (data: { email: string; fullName: string; Hp: string; source: string; }) => {
-      // Check for spam
-      const honeypot = data.Hp;
-      /*const [searchParams] = useSearchParams(); // ✅ Get URL parameters
-      const source = searchParams.get("src") || "Website"; // Default if missing
-      console.log("source: ", source);
-      console.log("submision source: ", data.source);
-      data.source=source;
-      console.log("submision updated: ", data);*/
-      
-     if (honeypot!== ""){
-          console.log("honey fail");
-          console.log("Spam detected! Blocking submission.");
-          throw new Error("Spam detected! Submission blocked.");
-      }else{
-        await fetch("/server/addUser.php", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-        });
-      }  
-      },
-      onSuccess: () => {
-        toast({
-          title: "Success!",
-          description: "You've been added to the waitlist.",
-        });
-        form.reset();
-      },
-      onError: (error: Error) => {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
-  });
-
 
   return (
     <div className="min-h-screen bg-off-white">
@@ -99,90 +125,57 @@ export default function Home() {
           <h2 className="text-2xl md:text-2xl italic mb-6 text-deep-navy">
             Find clean versions of your favorite books
           </h2>
-          <p className="text-xl text-deep-na  vy/80 max-w-2xl mx-auto">
+          <p className="text-xl text-deep-navy/80 max-w-2xl mx-auto">
             Now, you can read without worry and share books with confidence. Purli offers clean versions of your favorite books,
             removing profanity and explicit scenes while keeping the story intact.
           </p>
         </motion.div>
 
-        {/* Waitlist Form */}
-        <Card className="max-w-md mx-auto bg-white border-soft-gray">
-          <CardContent className="pt-6">
-            <p className="text-center mb-4 text-deep-navy/70">
-              Be the first to access Purli's collection of clean books. Sign up now and get notified at launch!
-            </p>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit((data: { email: string; fullName: string; Hp: string; source: string; }) => joinWaitlist.mutate(data))}
-                className="space-y-4"
-              >
-                <FormField
-                  control={form.control}
-                  name="fullName"
-                  render={({ field }: { field: any }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          placeholder="Full Name"
-                          {...field}
-                          className="border-soft-gray focus:border-faded-blue"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }: { field: any }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          placeholder="Email"
-                          type="email"
-                          {...field}
-                          className="border-soft-gray focus:border-faded-blue"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="Hp"
-                  render={({ field }: { field: any }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          placeholder="Address"
-                          {...field}
-                          className="border-soft-gray focus:border-faded-blue hidden"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  id="submitButton"
-                  type="submit"
-                  className="w-full bg-faded-blue hover:bg-soft-clay text-deep-navy font-medium"
-                  disabled={joinWaitlist.isPending}
-                >
-                  {joinWaitlist.isPending ? "Joining..." : "Join the Waitlist"}
-                </Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
-
-        {/* Stats */}
-        <div className="mt-8 text-center text-deep-navy/70">
-          <div className="flex items-center justify-center gap-2">
-           {/*<Users className="h-5 w-5" /> */}
-            <span>{/*{waitlistCount?.count || 0} readers already joined*/}</span>
+        {/* Featured Books Carousel */}
+        <div className="my-12">
+          <h2 className="text-3xl font-bold text-center mb-8 text-deep-navy">Featured Books</h2>
+          <Carousel className="w-full max-w-5xl mx-auto">
+            <CarouselContent>
+              {featuredBooks.map((book) => (
+                <CarouselItem key={book.id} className="md:basis-1/3 lg:basis-1/4">
+                  <Link to={`/book/${book.id}`}>
+                    <div className="p-1">
+                      <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                        <CardContent className="p-0">
+                          <AspectRatio ratio={2/3} className="bg-muted">
+                            <img 
+                              src={book.cover} 
+                              alt={book.title}
+                              className="object-cover w-full h-full"
+                            />
+                          </AspectRatio>
+                          <div className="p-4">
+                            <h3 className="font-semibold text-deep-navy truncate">{book.title}</h3>
+                            <p className="text-sm text-deep-navy/70">{book.author}</p>
+                            <div className="mt-2">
+                              <span className="inline-block px-2 py-1 text-xs bg-faded-blue/20 text-deep-navy rounded-full">
+                                {book.genre}
+                              </span>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </Link>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-0" />
+            <CarouselNext className="right-0" />
+          </Carousel>
+          <div className="text-center mt-6">
+            <Button 
+              variant="outline" 
+              className="bg-faded-blue hover:bg-soft-clay text-deep-navy font-medium"
+              asChild
+            >
+              <Link to="/books">View All Books</Link>
+            </Button>
           </div>
         </div>
       </div>
