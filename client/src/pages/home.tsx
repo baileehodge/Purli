@@ -45,100 +45,10 @@ import {
 } from "@/components/ui/carousel";
 import { Link } from "react-router-dom";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-
+import books from "../data/books.json";
 // Sample book data
-const featuredBooks = [
-    {
-        id: 1,
-        title: "The Silent Echo",
-        author: "Elizabeth Morgan",
-        cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=687&auto=format&fit=crop",
-        summary:
-            "A gripping tale of mystery and redemption set in a small coastal town.",
-        genre: "Mystery"
-    },
-    {
-        id: 2,
-        title: "Beyond the Horizon",
-        author: "James Patterson",
-        cover: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?q=80&w=687&auto=format&fit=crop",
-        summary:
-            "An epic adventure across continents in search of ancient wisdom.",
-        genre: "Adventure"
-    },
-    {
-        id: 3,
-        title: "Whispers in the Wind",
-        author: "Sarah Johnson",
-        cover: "https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=688&auto=format&fit=crop",
-        summary: "A heartwarming story of love and loss in rural America.",
-        genre: "Romance"
-    },
-    {
-        id: 4,
-        title: "The Last Guardian",
-        author: "Michael Chen",
-        cover: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=687&auto=format&fit=crop",
-        summary:
-            "In a world where magic is fading, one guardian stands between order and chaos.",
-        genre: "Fantasy"
-    },
-    {
-        id: 5,
-        title: "Echoes of Tomorrow",
-        author: "Amara Wilson",
-        cover: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=687&auto=format&fit=crop",
-        summary:
-            "A thought-provoking journey through possible futures and parallel realities.",
-        genre: "Science Fiction"
-    },
-    {
-        id: 6,
-        title: "The Hidden Truth",
-        author: "Robert Davis",
-        cover: "https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=1476&auto=format&fit=crop",
-        summary:
-            "A detective's relentless pursuit of justice uncovers secrets that threaten the entire city.",
-        genre: "Thriller"
-    },
-    {
-        id: 7,
-        title: "Seasons of Change",
-        author: "Emily Zhang",
-        cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=687&auto=format&fit=crop",
-        summary:
-            "Four friends navigate life's challenges through different seasons of their lives.",
-        genre: "Contemporary Fiction"
-    },
-    {
-        id: 8,
-        title: "Mountain's Echo",
-        author: "Daniel Torres",
-        cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1374&auto=format&fit=crop",
-        summary:
-            "A survival story set in the unforgiving wilderness of the Rocky Mountains.",
-        genre: "Adventure"
-    },
-    {
-        id: 9,
-        title: "The Forgotten Path",
-        author: "Olivia Parker",
-        cover: "https://images.unsplash.com/photo-1629992101753-56d196c8aabb?q=80&w=690&auto=format&fit=crop",
-        summary:
-            "An archaeological discovery leads to an ancient mystery with modern implications.",
-        genre: "Historical Fiction"
-    },
-    {
-        id: 10,
-        title: "Starlight Dreams",
-        author: "Nathan Williams",
-        cover: "https://images.unsplash.com/photo-1518744386442-2d48ac47a7eb?q=80&w=1374&auto=format&fit=crop",
-        summary:
-            "A young astronomer's journey to prove her revolutionary theory about the cosmos.",
-        genre: "Science Fiction"
-    }
-];
-
+const featuredBooks = books;
+    
 export default function Home() {
     const { toast } = useToast();
     const [searchParams] = useSearchParams();
